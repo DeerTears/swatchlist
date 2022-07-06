@@ -1,4 +1,8 @@
-[gd_scene format=2]
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://components/CustomPopup.gd" type="Script" id=1]
+[ext_resource path="res://shortcuts/Escape.tres" type="ShortCut" id=2]
+[ext_resource path="res://shortcuts/Enter.tres" type="ShortCut" id=3]
 
 [node name="Popups" type="Control"]
 anchor_right = 1.0
@@ -8,7 +12,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TestPopup" type="Panel" parent="."]
+[node name="SizeMenu" type="Panel" parent="."]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
@@ -18,8 +22,11 @@ margin_left = -125.0
 margin_top = -72.0
 margin_right = 125.0
 margin_bottom = 72.0
+script = ExtResource( 1 )
+enter_shortcut = ExtResource( 3 )
+escape_shortcut = ExtResource( 2 )
 
-[node name="Title" type="Label" parent="TestPopup"]
+[node name="Title" type="Label" parent="SizeMenu"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 240.0
@@ -30,7 +37,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSlider" type="HSlider" parent="TestPopup"]
+[node name="HSlider" type="HSlider" parent="SizeMenu"]
 margin_left = 10.0
 margin_top = 64.0
 margin_right = 240.0
@@ -40,7 +47,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Readout" type="Label" parent="TestPopup"]
+[node name="Readout" type="Label" parent="SizeMenu"]
 margin_left = 10.0
 margin_top = 40.0
 margin_right = 240.0
@@ -48,7 +55,7 @@ margin_bottom = 67.0
 text = "0.5"
 align = 1
 
-[node name="X" type="Button" parent="TestPopup"]
+[node name="X" type="Button" parent="SizeMenu"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -20.0
@@ -60,7 +67,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OK" type="Button" parent="TestPopup"]
+[node name="OK" type="Button" parent="SizeMenu"]
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -72,7 +79,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Cancel" type="Button" parent="TestPopup"]
+[node name="Cancel" type="Button" parent="SizeMenu"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -82,6 +89,71 @@ margin_top = -35.0
 margin_right = -4.0
 margin_bottom = -4.0
 text = "Cancel"
+
+[node name="About" type="Panel" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -151.0
+margin_top = -105.0
+margin_right = 151.0
+margin_bottom = 72.0
+script = ExtResource( 1 )
+enter_shortcut = ExtResource( 3 )
+escape_shortcut = ExtResource( 2 )
+
+[node name="Title" type="Label" parent="About"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 240.0
+margin_bottom = 37.0
+size_flags_vertical = 0
+text = "About"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Readout" type="Label" parent="About"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -48.5
+margin_bottom = -0.5
+text = "swatchlist v0.0.2
+created by Emberlynn Bland
+2022-07-06"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="X" type="Button" parent="About"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -20.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = 35.0
+text = "x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OK" type="Button" parent="About"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -27.5
+margin_top = -37.0
+margin_right = 27.5
+margin_bottom = -6.0
+text = "   OK   "
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ImportMenu" type="Panel" parent="."]
 visible = false
@@ -93,9 +165,12 @@ margin_left = -168.0
 margin_top = -94.0
 margin_right = 168.0
 margin_bottom = 94.0
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+enter_shortcut = ExtResource( 3 )
+escape_shortcut = ExtResource( 2 )
 
 [node name="Title" type="Label" parent="ImportMenu"]
 anchor_right = 1.0
@@ -142,7 +217,7 @@ margin_right = -4.0
 margin_bottom = -4.0
 text = "Cancel"
 
-[node name="OptionButton" type="OptionButton" parent="ImportMenu"]
+[node name="Option" type="OptionButton" parent="ImportMenu"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -155,12 +230,59 @@ text = "Paint.net"
 items = [ "Paint.net", null, false, 0, null, "GIMP", null, false, 1, null, "CSV", null, false, 2, null ]
 selected = 0
 
-[node name="FileDialog" type="FileDialog" parent="."]
+[node name="NewDialog" type="ConfirmationDialog" parent="."]
+margin_right = 200.0
+margin_bottom = 70.0
+window_title = "delete current swatchlist?"
+dialog_text = "All unsaved changes will be lost!"
+dialog_autowrap = true
+
+[node name="Rename" type="Panel" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-access = 2
-current_dir = "/Users/Ember/Gamedev/Godot/SwatchList"
-current_path = "/Users/Ember/Gamedev/Godot/SwatchList/"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+enter_shortcut = ExtResource( 3 )
+escape_shortcut = ExtResource( 2 )
+
+[node name="LineEdit" type="LineEdit" parent="Rename"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -12.0
+margin_bottom = 12.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cancel" type="Button" parent="Rename"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -54.0
+margin_top = -20.0
+text = "Cancel"
+
+[node name="OK" type="Button" parent="Rename"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -29.0
+margin_right = 55.0
+text = "   OK   "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="X" type="Button" parent="Rename"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -19.0
+margin_bottom = 20.0
+text = "x"
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -1,11 +1,6 @@
-# there are todos all around this script, just search for em
+# main functionality left todo:
 
-# todo (main functionalty)
-# 1. save the swatches as a csv text file
-# 1.1. create a generate_text_from_swatches() function)
-# 2. use the file dialog
-
-# 3. anything you missed here:
+# 1. 
 """
 Add: Click "add" button next to sliders
 Remove: Select swatch, click delete? OR click "delete mode" and click on swatch.
@@ -28,9 +23,6 @@ Copy Hex Code: Click on the swatch.
 # 2. make toggleable erase swatch state/button
 # 5. add saving palette to subpalette resource, then
 
-## freedom to fix mistakes
-# 1. allow an edit mode to let the user edit a swatch after it's been placed
-
 extends Panel
 
 const IMAGE_WIDTH := 2
@@ -46,7 +38,11 @@ export var open_command: ShortCut
 export var save_command: ShortCut
 export var save_as_command: ShortCut
 
+## How large in pixels the swatch squares are displayed.
+# Todo: make this affect TextureButton size.
 var swatch_size := 64
+
+var current_filename := "Untitled" setget set_current_filename, get_current_filename
 
 # Scenes
 onready var swatch: PackedScene = preload("res://components/Swatch.tscn")
@@ -75,10 +71,6 @@ onready var warnings: PanelContainer = $C/Split/Split/Warnings
 onready var warnings_label: RichTextLabel = $C/Split/Split/Warnings/RichLabel
 onready var warnings_tween: Tween = $C/Split/Split/Warnings/Tween
 
-# Images
-onready var images: PanelContainer = $C/Split/Split/Images
-onready var images_scroll_container: ScrollContainer = $C/Split/Split/Images/Scroll
-
 func _ready() -> void:
 	add_color_button.connect("pressed", self, "_on_addcolor_pressed")
 	color_picker.connect("color_changed", self, "_on_colorpicker_color_changed")
@@ -86,8 +78,10 @@ func _ready() -> void:
 	for menu_button in toolbar_buttons.get_children():
 		if menu_button is MenuButton:
 			menu_button.connect("item_pressed", self, "_on_toolbar_index_pressed")
-	# testing ability to drop image files onto the program
+	
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		if event.shortcut_match(save_command.get_shortcut(), true):
@@ -102,6 +96,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			copy_current_color()
 		elif event.shortcut_match(paste_command.get_shortcut(), true):
 			paste_color()
+
+
+# Todo: Allow dropping text files and opening Import dialog
+func _on_files_dropped(files: PoolStringArray, screen: int) -> void:
+	print(files)
+	print(screen)
+	send_warning("Dropped files are not yet fully supported.")
+
 
 func _on_addcolor_pressed() -> void:
 	add_new_color(color_picker.color)
@@ -127,21 +129,16 @@ func _on_toolbar_index_pressed(button_text: String, is_checked: bool) -> void:
 		# File
 		"New":
 			new()
+		"Rename":
+			rename()
 		"Open":
 			open()
 		"Save":
 			save(false)
-		"Save As...":
+		"Save As":
 			save(true)
 		"Quit":
 			get_tree().quit()
-		# Export
-		"As CSV...":
-			$Popups/FileDialog.popup()
-		"As CSS...":
-			$Popups/FileDialog.popup()
-		"As GIMP...":
-			$Popups/FileDialog.popup()
 		# View
 		"Show Workspace":
 			workspace.visible = is_checked
@@ -157,19 +154,28 @@ func _on_toolbar_index_pressed(button_text: String, is_checked: bool) -> void:
 				send_warning("Go to View -> Show Color Picker to turn the picker back on.")
 			else:
 				send_warning("")
-		"Show Images":
-			images.visible = is_checked
 		"Show Warnings":
 			warnings.visible = is_checked
 			if is_checked:
 				send_warning("Whew, it's dark in there. Thanks for bringing me back!")
 		# Help
-		"Find me on Itch.io...":
+		"About":
+			$Popups/About.show()
+		"Wiki...":
+			OS.shell_open("https://github.com/deertears/swatchlist/wiki")
+		"More games on itch.io":
 			OS.shell_open("https://deertears.itch.io")
 		"Report a Bug...":
-			OS.shell_open("mailto:gdnghtgrl@gmail.com")
-		"Request a Feature...":
-			OS.shell_open("mailto:gdnghtgrl@gmail.com")
+			OS.shell_open("https://github.com/DeerTears/swatchlist/issues/new")
+
+
+func set_current_filename(new_name: String) -> void:
+	current_filename = new_name
+	OS.set_window_title(new_name)
+
+
+func get_current_filename() -> String:
+	return current_filename
 
 
 func add_new_color(color: Color) -> void:
@@ -196,12 +202,15 @@ func add_new_color(color: Color) -> void:
 	yield(get_tree(), "idle_frame")
 	swatches_scroll_container.scroll_vertical = 99999
 
+
 func clear_color_list() -> void:
 	for child in swatches_list.get_children():
 		child.queue_free()
 
+
 func copy_current_color() -> void:
-	send_warning("Copying from keyboard is almost implemented!")
+	send_warning("Copying from keyboard is not implemented yet")
+
 
 func generate_color_image(color: Color) -> Image:
 	var img = Image.new()
@@ -213,10 +222,31 @@ func generate_color_image(color: Color) -> Image:
 	img.unlock()
 	return img
 
+
+func get_swatches_as_text() -> String:
+	var result := ""
+	var iterator := 0
+	var swatch_total := swatches_list.get_child_count()
+	for swatch in swatches_list.get_children():
+		result += swatch.name
+		if iterator <= swatch_total - 2:
+			result += "\n"
+			iterator += 1
+	return result
+
+
+func open() -> void:
+	OS.shell_open(ProjectSettings.globalize_path("user://"))
+
+
+func new() -> void:
+	$Popups/NewDialog.popup()
+	$Popups/NewDialog.connect("confirmed", self, "reset_all_swatches")
+
+
 func paste_color() -> void:
 	var paste_text: String = OS.get_clipboard().strip_escapes()
-	# valid_hex_number doesn't like hashes in text
-	paste_text = paste_text.trim_prefix("#")
+	paste_text = paste_text.trim_prefix("#") # valid_hex won't take hashes
 	if not paste_text.is_valid_hex_number(false):
 		send_warning("Clipboard pastes must be a hex number.")
 		return
@@ -226,24 +256,37 @@ func paste_color() -> void:
 	paste_color.a = 1.0
 	add_new_color(paste_color)
 
-func new() -> void:
-	send_warning("New is not yet implemented.")
 
-func open() -> void:
-	send_warning("Open is not yet implemented.")
+func rename() -> void:
+	$Popups/Rename.show()
 
-func save(new_file: bool) -> void:
-	if new_file:
-		send_warning("Save As is not yet implemented.")
+func reset_all_swatches() -> void:
+	for child in swatches_list.get_children():
+		child.queue_free()
+	set_current_filename("Untitled")
+
+
+func save(as_new_file: bool) -> void:
+	var file := File.new()
+	file.open("user://%s.swatchlist" % [current_filename], File.WRITE)
+	file.store_string(get_swatches_as_text())
+	file.close()
+	
+	var d: Directory = Directory.new()
+	if d.file_exists(
+		ProjectSettings.globalize_path(
+			"user://%s.swatchlist" % [current_filename]
+		)
+	):
+		if as_new_file:
+			send_warning("This file exists, saving as.")
+		else:
+			send_warning("This file exists, saving.")
 	else:
-		send_warning("Saving is not yet implemented.")
-
-# Todo: Allow dropping text files and opening Import dialog
-# Todo: Create an import dialog to ask the user which type of palette file this is
-func _on_files_dropped(files: PoolStringArray, screen: int) -> void:
-	print(files)
-	print(screen)
-	send_warning("Dropped files are not yet fully supported.")
+		if as_new_file:
+			send_warning("This file doesn't eixst, saving.")
+		else:
+			send_warning("This file doesn't eixst, saving as.")
 
 
 func send_warning(warning:String) -> void:
@@ -252,7 +295,8 @@ func send_warning(warning:String) -> void:
 	warnings_tween.interpolate_property(warnings_label, "percent_visible", 0.0, 1.0, 1.0, Tween.TRANS_LINEAR)
 	warnings_tween.start()
 
-# todo: make an error stand out visually
+
+# Todo: make errors stand out visually
 func send_error(error: String) -> void:
 	warnings_label.text = error
 	warnings_tween.stop_all()

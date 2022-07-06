@@ -9,18 +9,24 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Control",
+"class": "CustomPopup",
+"language": "GDScript",
+"path": "res://components/CustomPopup.gd"
+}, {
 "base": "MenuButton",
 "class": "ToolbarButton",
 "language": "GDScript",
 "path": "res://components/ToolbarButton.gd"
 } ]
 _global_script_class_icons={
+"CustomPopup": "",
 "ToolbarButton": ""
 }
 
 [application]
 
-config/name="SwatchList"
+config/name="swatchlist"
 config/description="A colour picker and palette viewer."
 run/main_scene="res://Main.tscn"
 run/low_processor_mode=true
