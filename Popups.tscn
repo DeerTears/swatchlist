@@ -1,0 +1,166 @@
+[gd_scene format=2]
+
+[node name="Popups" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TestPopup" type="Panel" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -125.0
+margin_top = -72.0
+margin_right = 125.0
+margin_bottom = 72.0
+
+[node name="Title" type="Label" parent="TestPopup"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 240.0
+margin_bottom = 37.0
+size_flags_vertical = 0
+text = "Select Swatch Size"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSlider" type="HSlider" parent="TestPopup"]
+margin_left = 10.0
+margin_top = 64.0
+margin_right = 240.0
+margin_bottom = 80.0
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Readout" type="Label" parent="TestPopup"]
+margin_left = 10.0
+margin_top = 40.0
+margin_right = 240.0
+margin_bottom = 67.0
+text = "0.5"
+align = 1
+
+[node name="X" type="Button" parent="TestPopup"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -20.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = 35.0
+text = "x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OK" type="Button" parent="TestPopup"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = -35.0
+margin_right = 42.0
+margin_bottom = -4.0
+text = "   OK   "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cancel" type="Button" parent="TestPopup"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -74.0
+margin_top = -35.0
+margin_right = -4.0
+margin_bottom = -4.0
+text = "Cancel"
+
+[node name="ImportMenu" type="Panel" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -168.0
+margin_top = -94.0
+margin_right = 168.0
+margin_bottom = 94.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="Label" parent="ImportMenu"]
+anchor_right = 1.0
+margin_bottom = 57.0
+size_flags_vertical = 0
+text = "Text file unrecognized, select most likely candidate."
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="X" type="Button" parent="ImportMenu"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -20.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = 35.0
+text = "x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OK" type="Button" parent="ImportMenu"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = -35.0
+margin_right = 42.0
+margin_bottom = -4.0
+text = "   OK   "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cancel" type="Button" parent="ImportMenu"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -74.0
+margin_top = -35.0
+margin_right = -4.0
+margin_bottom = -4.0
+text = "Cancel"
+
+[node name="OptionButton" type="OptionButton" parent="ImportMenu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -118.5
+margin_top = -15.5
+margin_right = 118.5
+margin_bottom = 15.5
+text = "Paint.net"
+items = [ "Paint.net", null, false, 0, null, "GIMP", null, false, 1, null, "CSV", null, false, 2, null ]
+selected = 0
+
+[node name="FileDialog" type="FileDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+access = 2
+current_dir = "/Users/Ember/Gamedev/Godot/SwatchList"
+current_path = "/Users/Ember/Gamedev/Godot/SwatchList/"
+__meta__ = {
+"_edit_use_anchors_": false
+}

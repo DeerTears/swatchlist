@@ -1,0 +1,344 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://Faceball2k.theme" type="Theme" id=1]
+[ext_resource path="res://Main.gd" type="Script" id=2]
+[ext_resource path="res://images/checkers.bmp" type="Texture" id=3]
+[ext_resource path="res://images/frametest.png" type="Texture" id=4]
+[ext_resource path="res://components/ToolbarButton.gd" type="Script" id=5]
+[ext_resource path="res://Popups.tscn" type="PackedScene" id=6]
+
+[sub_resource type="InputEventKey" id=11]
+control = true
+command = true
+scancode = 67
+
+[sub_resource type="ShortCut" id=12]
+shortcut = SubResource( 11 )
+
+[sub_resource type="InputEventKey" id=1]
+control = true
+command = true
+scancode = 86
+
+[sub_resource type="ShortCut" id=2]
+shortcut = SubResource( 1 )
+
+[sub_resource type="InputEventKey" id=3]
+control = true
+command = true
+scancode = 78
+
+[sub_resource type="ShortCut" id=4]
+shortcut = SubResource( 3 )
+
+[sub_resource type="InputEventKey" id=5]
+control = true
+command = true
+scancode = 79
+
+[sub_resource type="ShortCut" id=6]
+shortcut = SubResource( 5 )
+
+[sub_resource type="InputEventKey" id=7]
+control = true
+command = true
+scancode = 83
+
+[sub_resource type="ShortCut" id=8]
+shortcut = SubResource( 7 )
+
+[sub_resource type="InputEventKey" id=9]
+shift = true
+control = true
+command = true
+scancode = 83
+
+[sub_resource type="ShortCut" id=10]
+shortcut = SubResource( 9 )
+
+[node name="Main" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+include_hash_in_copy = true
+copy_command = SubResource( 12 )
+paste_command = SubResource( 2 )
+new_command = SubResource( 4 )
+open_command = SubResource( 6 )
+save_command = SubResource( 8 )
+save_as_command = SubResource( 10 )
+
+[node name="C" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Toolbar" type="PanelContainer" parent="C"]
+margin_right = 480.0
+margin_bottom = 51.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Buttons" type="HBoxContainer" parent="C/Toolbar"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 470.0
+margin_bottom = 41.0
+custom_constants/separation = 2
+
+[node name="File" type="MenuButton" parent="C/Toolbar/Buttons"]
+margin_right = 40.0
+margin_bottom = 31.0
+theme = ExtResource( 1 )
+text = "File"
+flat = false
+items = [ "New", null, 0, false, true, 0, 0, null, "", false, "Save", null, 0, false, true, 1, 0, null, "", false, "Save As...", null, 0, false, true, 2, 0, null, "", false, "Quit", null, 0, false, false, 4, 0, null, "", false ]
+switch_on_hover = true
+script = ExtResource( 5 )
+
+[node name="Export" type="MenuButton" parent="C/Toolbar/Buttons"]
+margin_left = 42.0
+margin_right = 115.0
+margin_bottom = 31.0
+focus_mode = 2
+theme = ExtResource( 1 )
+text = "Export"
+flat = false
+items = [ "As CSV...", null, 0, false, false, 0, 0, null, "", false, "As GIMP...", null, 0, false, false, 1, 0, null, "", false, "As Paint.net...", null, 0, false, false, 2, 0, null, "", false, "As CSS...", null, 0, false, false, 4, 0, null, "", false ]
+switch_on_hover = true
+script = ExtResource( 5 )
+
+[node name="View" type="MenuButton" parent="C/Toolbar/Buttons"]
+margin_left = 117.0
+margin_right = 167.0
+margin_bottom = 31.0
+theme = ExtResource( 1 )
+text = "View"
+flat = false
+items = [ "Show Workspace", null, 2, true, false, 0, 0, null, "", false, "Show Subpalette Selector", null, 2, false, true, 1, 0, null, "", false, "Show Color Picker", null, 2, true, false, 2, 0, null, "", false, "Show Images", null, 2, false, true, 3, 0, null, "", false, "Show Warnings", null, 2, true, false, 4, 0, null, "", false ]
+switch_on_hover = true
+script = ExtResource( 5 )
+
+[node name="Help" type="MenuButton" parent="C/Toolbar/Buttons"]
+margin_left = 169.0
+margin_right = 215.0
+margin_bottom = 31.0
+theme = ExtResource( 1 )
+text = "Help"
+flat = false
+items = [ "SwatchList v0.0.2", null, 0, false, false, 0, 0, null, "", true, "Report a Bug...", null, 0, false, false, 2, 0, null, "", false, "Request a Feature...", null, 0, false, false, 3, 0, null, "", false, "Find me on Itch.io...", null, 0, false, false, 4, 0, null, "", false ]
+switch_on_hover = true
+script = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="C/Toolbar/Buttons"]
+margin_left = 217.0
+margin_top = 2.0
+margin_right = 285.0
+margin_bottom = 29.0
+text = "v.0.0.2"
+
+[node name="Close" type="Button" parent="C/Toolbar/Buttons"]
+margin_left = 444.0
+margin_right = 460.0
+margin_bottom = 31.0
+size_flags_horizontal = 10
+theme = ExtResource( 1 )
+text = "X"
+
+[node name="SubPaletteSelector" type="OptionButton" parent="C"]
+margin_top = 51.0
+margin_right = 480.0
+margin_bottom = 82.0
+text = "Incredible"
+items = [ "Incredible", null, false, 0, null, "Sunlight", null, false, 1, null, "Softboy", null, false, 2, null ]
+selected = 0
+
+[node name="Split" type="VSplitContainer" parent="C"]
+margin_top = 82.0
+margin_right = 480.0
+margin_bottom = 780.0
+size_flags_vertical = 3
+
+[node name="Workspace" type="PanelContainer" parent="C/Split"]
+margin_right = 480.0
+margin_bottom = 638.0
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="C" type="HBoxContainer" parent="C/Split/Workspace"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 470.0
+margin_bottom = 628.0
+
+[node name="Scroll" type="ScrollContainer" parent="C/Split/Workspace/C"]
+margin_right = 126.0
+margin_bottom = 618.0
+rect_min_size = Vector2( 0, 128 )
+size_flags_horizontal = 3
+follow_focus = true
+scroll_horizontal_enabled = false
+
+[node name="Colors" type="GridContainer" parent="C/Split/Workspace/C/Scroll"]
+margin_right = 64.0
+margin_bottom = 618.0
+rect_min_size = Vector2( 64, 0 )
+size_flags_vertical = 3
+
+[node name="PickerPanel" type="VBoxContainer" parent="C/Split/Workspace/C"]
+margin_left = 130.0
+margin_right = 460.0
+margin_bottom = 618.0
+
+[node name="AddColor" type="Button" parent="C/Split/Workspace/C/PickerPanel"]
+margin_right = 330.0
+margin_bottom = 31.0
+text = "      Add to Palette"
+align = 0
+
+[node name="ColorRect" type="ColorRect" parent="C/Split/Workspace/C/PickerPanel/AddColor"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 8.0
+margin_top = -8.0
+margin_right = 24.0
+margin_bottom = 8.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorPicker" type="ColorPicker" parent="C/Split/Workspace/C/PickerPanel"]
+margin_top = 35.0
+margin_right = 330.0
+margin_bottom = 490.0
+edit_alpha = false
+presets_enabled = false
+presets_visible = false
+
+[node name="Split" type="VSplitContainer" parent="C/Split"]
+margin_top = 646.0
+margin_right = 480.0
+margin_bottom = 698.0
+
+[node name="Images" type="PanelContainer" parent="C/Split/Split"]
+visible = false
+margin_right = 420.0
+margin_bottom = 64.0
+size_flags_vertical = 3
+
+[node name="Scroll" type="ScrollContainer" parent="C/Split/Split/Images"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 410.0
+margin_bottom = 54.0
+follow_focus = true
+scroll_vertical_enabled = false
+
+[node name="C" type="HBoxContainer" parent="C/Split/Split/Images/Scroll"]
+margin_right = 472.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ExampleImage" type="ToolButton" parent="C/Split/Split/Images/Scroll/C"]
+margin_right = 64.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+action_mode = 0
+button_mask = 3
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ExampleImage2" type="ToolButton" parent="C/Split/Split/Images/Scroll/C"]
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+action_mode = 0
+button_mask = 3
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ExampleImage3" type="ToolButton" parent="C/Split/Split/Images/Scroll/C"]
+margin_left = 136.0
+margin_right = 200.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+action_mode = 0
+button_mask = 3
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ExampleImage4" type="ToolButton" parent="C/Split/Split/Images/Scroll/C"]
+margin_left = 204.0
+margin_right = 268.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+action_mode = 0
+button_mask = 3
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ExampleImage5" type="ToolButton" parent="C/Split/Split/Images/Scroll/C"]
+margin_left = 272.0
+margin_right = 336.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+action_mode = 0
+button_mask = 3
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ExampleImage6" type="ToolButton" parent="C/Split/Split/Images/Scroll/C"]
+margin_left = 340.0
+margin_right = 404.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+action_mode = 0
+button_mask = 3
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="AddImage" type="ToolButton" parent="C/Split/Split/Images/Scroll/C"]
+margin_left = 408.0
+margin_right = 472.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+action_mode = 0
+button_mask = 3
+icon = ExtResource( 4 )
+expand_icon = true
+
+[node name="Warnings" type="PanelContainer" parent="C/Split/Split"]
+margin_right = 480.0
+margin_bottom = 52.0
+size_flags_vertical = 3
+
+[node name="RichLabel" type="RichTextLabel" parent="C/Split/Split/Warnings"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 470.0
+margin_bottom = 42.0
+rect_min_size = Vector2( 0, 32 )
+focus_mode = 2
+bbcode_enabled = true
+bbcode_text = "Welcome to SwatchList version 0.1!"
+text = "Welcome to SwatchList version 0.1!"
+scroll_following = true
+selection_enabled = true
+
+[node name="Tween" type="Tween" parent="C/Split/Split/Warnings"]
+
+[node name="Popups" parent="." instance=ExtResource( 6 )]
