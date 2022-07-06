@@ -45,7 +45,7 @@ var swatch_size := 64
 var current_filename := "Untitled" setget set_current_filename, get_current_filename
 
 # Scenes
-onready var swatch: PackedScene = preload("res://components/Swatch.tscn")
+onready var swatch_template: PackedScene = preload("res://components/Swatch.tscn")
 
 # Top of Application
 onready var toolbar_buttons: HBoxContainer = $C/Toolbar/Buttons
@@ -55,23 +55,25 @@ onready var sub_palette_selector_button: OptionButton = $C/SubPaletteSelector
 onready var workspace: PanelContainer = $C/Split/Workspace
 
 # Color Picker
-onready var color_picker_container: VBoxContainer = $C/Split/Workspace/C/PickerPanel
-onready var color_picker: ColorPicker = $C/Split/Workspace/C/PickerPanel/ColorPicker
+onready var color_picker_container: VBoxContainer = $C/Split/Split/Split/PickerPanel/V
+onready var color_picker: ColorPicker = $C/Split/Split/Split/PickerPanel/V/ColorPicker
 
 # Add Color Button
-onready var add_color_button: Button = $C/Split/Workspace/C/PickerPanel/AddColor
-onready var color_preview: ColorRect = $C/Split/Workspace/C/PickerPanel/AddColor/ColorRect
+onready var add_color_button: Button = $C/Split/Split/Split/PickerPanel/V/AddColor
+onready var color_preview: ColorRect = $C/Split/Split/Split/PickerPanel/V/AddColor/ColorRect
 
 # Swatches
 onready var swatches_scroll_container: ScrollContainer = $C/Split/Workspace/C/Scroll
 onready var swatches_list: GridContainer = $C/Split/Workspace/C/Scroll/Colors
 
 # Warnings
-onready var warnings: PanelContainer = $C/Split/Split/Warnings
-onready var warnings_label: RichTextLabel = $C/Split/Split/Warnings/RichLabel
-onready var warnings_tween: Tween = $C/Split/Split/Warnings/Tween
+onready var warnings: PanelContainer = $C/Split/Split/Split/Warnings
+onready var warnings_label: RichTextLabel = $C/Split/Split/Split/Warnings/RichLabel
+onready var warnings_tween: Tween = $C/Split/Split/Split/Warnings/Tween
 
 func _ready() -> void:
+	$Popups.connect("setting_applied", self, "_on_popup_setting_applied")
+	
 	add_color_button.connect("pressed", self, "_on_addcolor_pressed")
 	color_picker.connect("color_changed", self, "_on_colorpicker_color_changed")
 	
@@ -85,9 +87,9 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		if event.shortcut_match(save_command.get_shortcut(), true):
-			save(false)
+			attempt_save(false)
 		elif event.shortcut_match(save_as_command.get_shortcut(), true):
-			save(true)
+			attempt_save(true)
 		elif event.shortcut_match(new_command.get_shortcut(), true):
 			new()
 		elif event.shortcut_match(open_command.get_shortcut(), true):
@@ -97,21 +99,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.shortcut_match(paste_command.get_shortcut(), true):
 			paste_color()
 
-
 # Todo: Allow dropping text files and opening Import dialog
-func _on_files_dropped(files: PoolStringArray, screen: int) -> void:
-	print(files)
-	print(screen)
+func _on_files_dropped(_files: PoolStringArray, _screen: int) -> void:
+#	print(files)
 	send_warning("Dropped files are not yet fully supported.")
-
 
 func _on_addcolor_pressed() -> void:
 	add_new_color(color_picker.color)
 
-
 func _on_colorpicker_color_changed(color: Color) -> void:
 	color_preview.color = color
 
+func _on_popup_setting_applied(data: String) -> void:
+	set_current_filename(data)
 
 func _on_swatch_pressed(color_hex: String) -> void:
 	var button_mask = Input.get_mouse_button_mask()
@@ -134,9 +134,9 @@ func _on_toolbar_index_pressed(button_text: String, is_checked: bool) -> void:
 		"Open":
 			open()
 		"Save":
-			save(false)
+			attempt_save(false)
 		"Save As":
-			save(true)
+			attempt_save(true)
 		"Quit":
 			get_tree().quit()
 		# View
@@ -160,7 +160,7 @@ func _on_toolbar_index_pressed(button_text: String, is_checked: bool) -> void:
 				send_warning("Whew, it's dark in there. Thanks for bringing me back!")
 		# Help
 		"About":
-			$Popups/About.show()
+			$Popups/About.popup()
 		"Wiki...":
 			OS.shell_open("https://github.com/deertears/swatchlist/wiki")
 		"More games on itch.io":
@@ -192,7 +192,7 @@ func add_new_color(color: Color) -> void:
 	var new_texture := ImageTexture.new()
 	new_texture.create_from_image(generate_color_image(color))
 	new_texture.flags = 0
-	var new_button = swatch.instance()
+	var new_button = swatch_template.instance()
 	new_button.name = color.to_html(false)
 	new_button.icon = new_texture
 	new_button.rect_min_size = Vector2(swatch_size, swatch_size)
@@ -258,7 +258,7 @@ func paste_color() -> void:
 
 
 func rename() -> void:
-	$Popups/Rename.show()
+	$Popups/Rename.popup()
 
 func reset_all_swatches() -> void:
 	for child in swatches_list.get_children():
@@ -266,12 +266,7 @@ func reset_all_swatches() -> void:
 	set_current_filename("Untitled")
 
 
-func save(as_new_file: bool) -> void:
-	var file := File.new()
-	file.open("user://%s.swatchlist" % [current_filename], File.WRITE)
-	file.store_string(get_swatches_as_text())
-	file.close()
-	
+func attempt_save(as_new_file: bool) -> void:
 	var d: Directory = Directory.new()
 	if d.file_exists(
 		ProjectSettings.globalize_path(
@@ -282,12 +277,15 @@ func save(as_new_file: bool) -> void:
 			send_warning("This file exists, saving as.")
 		else:
 			send_warning("This file exists, saving.")
+			save()
 	else:
-		if as_new_file:
-			send_warning("This file doesn't eixst, saving.")
-		else:
-			send_warning("This file doesn't eixst, saving as.")
+		send_warning("This file doesn't exist, saving as.")
 
+func save() -> void:
+	var file := File.new()
+	file.open("user://%s.swatchlist" % [current_filename], File.WRITE)
+	file.store_string(get_swatches_as_text())
+	file.close()
 
 func send_warning(warning:String) -> void:
 	warnings_label.text = warning
