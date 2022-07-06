@@ -1,27 +1,15 @@
 # main functionality left todo:
-
-# 1. 
 """
-Add: Click "add" button next to sliders
-Remove: Select swatch, click delete? OR click "delete mode" and click on swatch.
-Move:
-	1. Click and hold on swatch, it will automatically reposition itself along the list while the mouse is held down. Release to confirm current position.
-	OR 2. Move it between two swatches to place there. (SHOW USER THEIR DROP TARGETS. LET USER INCREASE SWATCH SIZE/TARGET SIZE TOO.)
-Edit: Double click a swatch to open a colour dialog menu.
-Copy Hex Code: Click on the swatch.
+Remove: click "delete mode" and click on swatch.
+Move: Click and hold on swatch, it will automatically reposition itself along the list while the mouse is held down. Release to confirm current position. Show users their drop targets, let users increase swatch/target size.
+Edit: Double click a swatch to open colour dialog menu.
 """
-
-# NICE TO HAVE
+# nice to have:
 
 ## subpalettes and custom resource saving
 # 1. Connect updates from the swatches changing to a Resource updated in real-time
-# 2. Use that resource to store subpalette resources
+# 2. Use that resource to store subpalette resources and names on colours
 # 3. Save this resource with subpalettes stored
-
-## smooth moving around palettes
-# 1. make custom drag and drop solution to reorder swatches with right click
-# 2. make toggleable erase swatch state/button
-# 5. add saving palette to subpalette resource, then
 
 extends Panel
 
@@ -44,6 +32,7 @@ var swatch_size := 64
 
 var current_filename := "Untitled" setget set_current_filename, get_current_filename
 
+
 # Scenes
 onready var swatch_template: PackedScene = preload("res://components/Swatch.tscn")
 
@@ -54,13 +43,7 @@ onready var sub_palette_selector_button: OptionButton = $C/SubPaletteSelector
 # Workspace
 onready var workspace: PanelContainer = $C/Split/Workspace
 
-# Color Picker
-onready var color_picker_container: VBoxContainer = $C/Split/Split/Split/PickerPanel/V
-onready var color_picker: ColorPicker = $C/Split/Split/Split/PickerPanel/V/ColorPicker
-
-# Add Color Button
-onready var add_color_button: Button = $C/Split/Split/Split/PickerPanel/V/AddColor
-onready var color_preview: ColorRect = $C/Split/Split/Split/PickerPanel/V/AddColor/ColorRect
+onready var picker_panel := $C/Split/Split/Split/PickerPanel
 
 # Swatches
 onready var swatches_scroll_container: ScrollContainer = $C/Split/Workspace/C/Scroll
@@ -73,10 +56,7 @@ onready var warnings_tween: Tween = $C/Split/Split/Split/Warnings/Tween
 
 func _ready() -> void:
 	$Popups.connect("setting_applied", self, "_on_popup_setting_applied")
-	
-	add_color_button.connect("pressed", self, "_on_addcolor_pressed")
-	color_picker.connect("color_changed", self, "_on_colorpicker_color_changed")
-	
+	$C/Split/Split/Split/PickerPanel.connect("color_chosen", self, "add_new_color")
 	for menu_button in toolbar_buttons.get_children():
 		if menu_button is MenuButton:
 			menu_button.connect("item_pressed", self, "_on_toolbar_index_pressed")
@@ -96,22 +76,18 @@ func _unhandled_input(event: InputEvent) -> void:
 			open()
 		elif event.shortcut_match(copy_command.get_shortcut(), true):
 			copy_current_color()
-		elif event.shortcut_match(paste_command.get_shortcut(), true):
-			paste_color()
+#		elif event.shortcut_match(paste_command.get_shortcut(), true):
+#			paste_color()
+
 
 # Todo: Allow dropping text files and opening Import dialog
 func _on_files_dropped(_files: PoolStringArray, _screen: int) -> void:
-#	print(files)
 	send_warning("Dropped files are not yet fully supported.")
 
-func _on_addcolor_pressed() -> void:
-	add_new_color(color_picker.color)
-
-func _on_colorpicker_color_changed(color: Color) -> void:
-	color_preview.color = color
 
 func _on_popup_setting_applied(data: String) -> void:
 	set_current_filename(data)
+
 
 func _on_swatch_pressed(color_hex: String) -> void:
 	var button_mask = Input.get_mouse_button_mask()
@@ -130,7 +106,7 @@ func _on_toolbar_index_pressed(button_text: String, is_checked: bool) -> void:
 		"New":
 			new()
 		"Rename":
-			rename()
+			rename(false)
 		"Open":
 			open()
 		"Save":
@@ -149,7 +125,7 @@ func _on_toolbar_index_pressed(button_text: String, is_checked: bool) -> void:
 		"Show Subpalette Selector":
 			sub_palette_selector_button.visible = is_checked
 		"Show Color Picker":
-			color_picker_container.visible = is_checked
+			picker_panel.visible = is_checked
 			if not is_checked:
 				send_warning("Go to View -> Show Color Picker to turn the picker back on.")
 			else:
@@ -178,7 +154,7 @@ func get_current_filename() -> String:
 	return current_filename
 
 
-func add_new_color(color: Color) -> void:
+func add_new_color(color) -> void:
 	for swatch in swatches_list.get_children():
 		if swatch.name.matchn(color.to_html(false)):
 			send_warning("This color is already in the list.")
@@ -244,21 +220,25 @@ func new() -> void:
 	$Popups/NewDialog.connect("confirmed", self, "reset_all_swatches")
 
 
-func paste_color() -> void:
-	var paste_text: String = OS.get_clipboard().strip_escapes()
-	paste_text = paste_text.trim_prefix("#") # valid_hex won't take hashes
-	if not paste_text.is_valid_hex_number(false):
-		send_warning("Clipboard pastes must be a hex number.")
-		return
-	if paste_text.length() > 6:
-		paste_text = paste_text.substr(0, 6)
-	var paste_color := Color(paste_text)
-	paste_color.a = 1.0
-	add_new_color(paste_color)
+#func paste_color() -> void:
+#	var paste_text: String = OS.get_clipboard().strip_escapes()
+#	paste_text = paste_text.trim_prefix("#") # valid_hex won't take hashes
+#	if not paste_text.is_valid_hex_number(false):
+#		send_warning("Clipboard pastes must be a hex number.")
+#		return
+#	if paste_text.length() > 6:
+#		paste_text = paste_text.substr(0, 6)
+#	var paste_color := Color(paste_text)
+#	paste_color.a = 1.0
+#	add_new_color(paste_color)
 
 
-func rename() -> void:
+func rename(has_to_save_after_rename: bool) -> void:
 	$Popups/Rename.popup()
+	if has_to_save_after_rename:
+		yield($Popups, "setting_applied")
+		save()
+
 
 func reset_all_swatches() -> void:
 	for child in swatches_list.get_children():
@@ -275,17 +255,28 @@ func attempt_save(as_new_file: bool) -> void:
 	):
 		if as_new_file:
 			send_warning("This file exists, saving as.")
+			save_as()
 		else:
 			send_warning("This file exists, saving.")
 			save()
 	else:
 		send_warning("This file doesn't exist, saving as.")
+		save_as()
+
 
 func save() -> void:
 	var file := File.new()
 	file.open("user://%s.swatchlist" % [current_filename], File.WRITE)
 	file.store_string(get_swatches_as_text())
 	file.close()
+
+
+func save_as() -> void:
+	if current_filename == "Untitled":
+		rename(true)
+	else:
+		save()
+
 
 func send_warning(warning:String) -> void:
 	warnings_label.text = warning

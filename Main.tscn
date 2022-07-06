@@ -72,9 +72,6 @@ save_as_command = SubResource( 10 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Toolbar" type="PanelContainer" parent="C"]
 margin_right = 440.0
@@ -97,7 +94,7 @@ margin_bottom = 31.0
 theme = ExtResource( 1 )
 text = "File"
 flat = false
-items = [ "New", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false, "Open", null, 0, false, false, 2, 0, null, "", false, "Save", null, 0, false, false, 4, 0, null, "", false, "Save As", null, 0, false, false, 4, 0, null, "", false, "Quit", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "New", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false, "Open", null, 0, false, false, 2, 0, null, "", false, "Save", null, 0, false, false, 4, 0, null, "", false, "Quit", null, 0, false, false, 5, 0, null, "", false ]
 switch_on_hover = true
 script = ExtResource( 5 )
 

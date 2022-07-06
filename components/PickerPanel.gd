@@ -11,7 +11,7 @@ func _ready():
 	color_picker.connect("color_changed", self, "_on_colorpicker_color_changed")
 
 func _on_addcolor_pressed() -> void:
-	emit_signal("color_chosen", self, [color_picker.color])
+	emit_signal("color_chosen", color_picker.color)
 
 func _on_colorpicker_color_changed(color: Color) -> void:
 	color_preview.color = color
