@@ -70,5 +70,4 @@ vram_compression/import_etc2=false
 quality/reflections/high_quality_ggx=false
 quality/depth_prepass/enable=false
 quality/skinning/software_skinning_fallback=false
-environment/default_environment="res://default_env.tres"
 quality/dynamic_fonts/use_oversampling=false
