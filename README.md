@@ -9,15 +9,12 @@ See the [wiki](https://github.com/DeerTears/swatchlist/wiki/Basics) to learn how
 
 ## intent
 
-swatchlist is a small app to let you play around with colours, combinations, and save them for later use across multiple programs.
+swatchlist is a small app to let you play around with colours and save them for later use in multiple programs.
 
-I wanted to make swatchlist for three main reasons:I wanted to make swatchlist for three main reasons:
-
-I'm a graphic designer who's always toying with different colour combinations for clients, personal projects, or just as experiments. I spend a good hour every week just inputting hex colours, most of that time spent precariously copying hex codes in small text fields.
-
-Additionally, I'm pretty tired of saving all my data with Adobe or Pantone. Even smaller-run palette generators and savers often require some form of account to save what you've made. Colours should not be proprietary data.
-
-Lastly, I just wanted a little tool project to make for fun as a side project. I'm very inspired by amazing tools like Obsidian and Masterplan.
+I wanted to make swatchlist for three main reasons:
+1. I'm a graphic designer. I spend a good hour every week just inputting hex colours, most of that time spent precariously copying hex codes in small text fields with evil nearby text.
+2. I'm tired of saving colour data with Adobe, Pantone, and other similar services. Colours should not be proprietary data.
+3. I just wanted a little tool project to make for fun as a side project. ;)
 
 ## roadmap
 
