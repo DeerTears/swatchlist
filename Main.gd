@@ -32,7 +32,6 @@ var swatch_size := 64
 
 var current_filename := "Untitled" setget set_current_filename, get_current_filename
 
-
 # Scenes
 onready var swatch_template: PackedScene = preload("res://components/Swatch.tscn")
 
@@ -139,9 +138,11 @@ func _on_toolbar_index_pressed(button_text: String, is_checked: bool) -> void:
 			$Popups/About.popup()
 		"Wiki...":
 			OS.shell_open("https://github.com/deertears/swatchlist/wiki")
-		"More games on itch.io":
-			OS.shell_open("https://deertears.itch.io")
-		"Report a Bug...":
+		"See my other tools...":
+			OS.shell_open("https://github.com/deertears")
+		"Report Bugs...":
+			OS.shell_open("https://github.com/DeerTears/swatchlist/issues/new")
+		"Suggest Features...":
 			OS.shell_open("https://github.com/DeerTears/swatchlist/issues/new")
 
 
